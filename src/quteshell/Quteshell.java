@@ -3,7 +3,13 @@ package quteshell;
 import quteshell.command.Command;
 import quteshell.command.Elevation;
 import quteshell.command.Toolbox;
-import quteshell.commands.*;
+import quteshell.commands.Exit;
+import quteshell.commands.Help;
+import quteshell.commands.Welcome;
+import shebang.commands.api;
+import shebang.commands.edit;
+import shebang.commands.fex;
+import shebang.commands.mkfs;
 
 import java.io.*;
 import java.net.Socket;
@@ -24,12 +30,11 @@ public class Quteshell extends Console {
     private final Command[] COMMANDS = {
             new Welcome(),
             new Help(),
-            new Clear(),
-            new Echo(),
-            new History(),
-            new Rerun(),
-            new ID(),
-            new Exit()
+            new Exit(),
+            new api(),
+            new edit(),
+            new fex(),
+            new mkfs()
     };
 
     // ID & Host access
@@ -48,7 +53,7 @@ public class Quteshell extends Console {
     private ArrayList<String> history = new ArrayList<>();
 
     // UI
-    private String name = id;
+    private String name = id + "@qs";
 
     /**
      * Default constructor without a name.
@@ -185,7 +190,7 @@ public class Quteshell extends Console {
      * @param length Length of string
      * @return Random string
      */
-    private String random(int length) {
+    public String random(int length) {
         final String charset = "0123456789abcdefghijklmnopqrstuvwxyz";
         if (length > 0) {
             return charset.charAt(new Random().nextInt(charset.length())) + random(length - 1);

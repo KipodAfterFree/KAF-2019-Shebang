@@ -1,7 +1,7 @@
 package quteshell.commands;
 
-import quteshell.command.Command;
 import quteshell.Quteshell;
+import quteshell.command.Command;
 import quteshell.command.Elevation;
 
 /**
@@ -15,8 +15,9 @@ public class Welcome implements Command {
     @Override
     public void execute(Quteshell shell, String arguments) {
         shell.writeln("╔═══════════════════════════════════╗");
-        shell.writeln("║       Welcome to Quteshell!       ║");
+        shell.writeln("║ You are now logged in as " + shell.getID() + "@qs. ║");
         shell.writeln("║ You can type 'help' for commands. ║");
+        shell.writeln("║ For filesystem access, use 'mkfs' ║");
         shell.writeln("╚═══════════════════════════════════╝");
     }
 }
