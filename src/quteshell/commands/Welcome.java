@@ -15,9 +15,13 @@ public class Welcome implements Command {
     @Override
     public void execute(Quteshell shell, String arguments) {
         shell.writeln("╔═══════════════════════════════════╗");
-        shell.writeln("║ You are now logged in as " + shell.getID() + "@qs. ║");
-        shell.writeln("║ You can type 'help' for commands. ║");
-        shell.writeln("║ For filesystem access, use 'mkfs' ║");
+        shell.writeln("║  Welcome to the 'Shebang!' game!  ║");
+        shell.writeln("║   You are now logged in as " + shell.getID() + "   ║");
+        shell.writeln("║  You can type 'help' for actions  ║");
+        shell.writeln("║        Game introduction:         ║");
+        shell.writeln("║  Buy and sell items @ the market  ║");
+        shell.writeln("║Type shebang when u have all flags.║");
         shell.writeln("╚═══════════════════════════════════╝");
+        shell.execute("money");
     }
 }

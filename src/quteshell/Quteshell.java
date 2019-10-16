@@ -1,20 +1,21 @@
 package quteshell;
 
+import org.reflections.Reflections;
 import quteshell.command.Command;
 import quteshell.command.Elevation;
 import quteshell.command.Toolbox;
 import quteshell.commands.Exit;
 import quteshell.commands.Help;
 import quteshell.commands.Welcome;
-import shebang.commands.api;
-import shebang.commands.edit;
-import shebang.commands.fex;
-import shebang.commands.mkfs;
+import shebang.Market;
+import shebang.commands.money;
+import shebang.commands.sellers;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Copyright (c) 2019 Nadav Tasher
@@ -27,15 +28,17 @@ public class Quteshell extends Console {
     private static final String NAME = "qute";
 
     // Shell commands
-    private final Command[] COMMANDS = {
+    private Command[] COMMANDS = {
             new Welcome(),
             new Help(),
             new Exit(),
-            new api(),
-            new edit(),
-            new fex(),
-            new mkfs()
+            new money(),
+            new sellers()
     };
+
+    public boolean isRunning() {
+        return running;
+    }
 
     // ID & Host access
     private String id = random(4);
@@ -53,7 +56,7 @@ public class Quteshell extends Console {
     private ArrayList<String> history = new ArrayList<>();
 
     // UI
-    private String name = id + "@qs";
+    private String name = "shebang!";
 
     /**
      * Default constructor without a name.
@@ -62,6 +65,8 @@ public class Quteshell extends Console {
      */
     public Quteshell(Socket socket) {
         this.socket = socket;
+        Reflections reflections = new Reflections(getClass().getPackage());
+        Set<Class<? extends Command>> classes = reflections.getSubTypesOf(Command.class);
     }
 
     /**
@@ -128,6 +133,7 @@ public class Quteshell extends Console {
                 thread = new Thread(() -> {
                     // Initialize a welcome message
                     read("welcome");
+                    Market.begin(this);
                     try {
                         // Begin listening
                         while (running) {
@@ -190,7 +196,7 @@ public class Quteshell extends Console {
      * @param length Length of string
      * @return Random string
      */
-    public String random(int length) {
+    public static String random(int length) {
         final String charset = "0123456789abcdefghijklmnopqrstuvwxyz";
         if (length > 0) {
             return charset.charAt(new Random().nextInt(charset.length())) + random(length - 1);
