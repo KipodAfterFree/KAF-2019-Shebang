@@ -1,6 +1,5 @@
 package quteshell;
 
-import org.reflections.Reflections;
 import quteshell.command.Command;
 import quteshell.command.Elevation;
 import quteshell.command.Toolbox;
@@ -65,8 +64,6 @@ public class Quteshell extends Console {
      */
     public Quteshell(Socket socket) {
         this.socket = socket;
-        Reflections reflections = new Reflections(getClass().getPackage());
-        Set<Class<? extends Command>> classes = reflections.getSubTypesOf(Command.class);
     }
 
     /**

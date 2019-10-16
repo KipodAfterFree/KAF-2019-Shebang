@@ -1,17 +1,23 @@
 package shebang.commands;
 
+import quteshell.Console;
 import quteshell.Quteshell;
 import quteshell.command.Command;
-import shebang.Tuple;
+import quteshell.command.Elevation;
+import shebang.Market;
 
 import java.util.ArrayList;
-import java.util.Random;
 
+@Elevation(Elevation.DEFAULT)
 public class sellers implements Command {
 
     @Override
     public void execute(Quteshell shell, String arguments) {
-        ArrayList<shebang.Market.Seller> sellers = Market.getMarket(shell.getID());
+        ArrayList<Market.Seller> sellers = Market.getMarket(shell.getID());
+        for (Market.Seller seller : sellers) {
+            shell.write(seller.name + " - ");
+            shell.writeln((seller.bankrupt ? "Bankrupt" : "OK"), seller.bankrupt ? Console.Color.LightRed : Console.Color.LightGreen);
+        }
     }
 
 }

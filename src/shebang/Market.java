@@ -11,262 +11,140 @@ public class Market {
     private static final ArrayList<Tuple<String, ArrayList<Seller>>> markets = new ArrayList<>();
 
     public static void begin(Quteshell shell) {
+        ArrayList<Seller> sellers = new ArrayList<>();
+        for (int i = 0; i < 25; i++) {
+            Seller s = new Seller(sellers);
+            for (int a = 0; a < 5; a++) {
+                s.inventory.add(new Tuple<>(Item.ALL_ITEMS[new Random().nextInt(Item.ALL_ITEMS.length)], new Random().nextInt(10) + 1));
+            }
+            sellers.add(s);
+        }
+        markets.add(new Tuple<>(shell.getID(), sellers));
         new Thread(() -> {
-            ArrayList<Seller> sellers = new ArrayList<>();
-
-            Tuple<String, ArrayList<Seller>> market = new Tuple<>(shell.getID(), sellers);
-            markets.add(market);
             while (shell.isRunning()) {
-                Seller a = market.getB().get(new Random().nextInt(market.getB().size()));
-                Seller b = market.getB().get(new Random().nextInt(market.getB().size()));
-                shell.write(a.nickname + " to buy from " + b.nickname + ": ", Console.Color.LightCyan);
-                if (!a.bankrupt && !b.bankrupt) {
-                    Tuple<Item, Integer> iItem = b.inventory.get(new Random().nextInt(b.inventory.size()));
-                    Item sell = iItem.getA();
-                    int amount = new Random().nextInt(iItem.getB() - 1) + 1;
-                    int pricePerPiece = sell.value + new Random().nextInt(sell.value / 2) * (new Random().nextInt(2) - 1);
-                    shell.write("Moneyworth: " + pricePerPiece * amount);
-                    if (a.buy(pricePerPiece, amount, sell)) {
-                        iItem.setB(iItem.getB() - amount);
-                        if (iItem.getB() == 0) {
-                            b.inventory.remove(iItem);
+                try {
+                    Seller a = choose(sellers);
+                    Seller b = choose(sellers);
+                    Tuple<Item, Integer> item = b.inventory.get(new Random().nextInt(b.inventory.size()));
+                    int amount = 1;
+                    if (item.getB() > 1)
+                        amount += new Random().nextInt(item.getB() - 1);
+                    int pricePerPiece = item.getA().value;
+                    if (pricePerPiece > 1)
+                        pricePerPiece += new Random().nextInt(pricePerPiece / 2) * (new Random().nextInt(2) - 1);
+                    shell.writeln();
+                    shell.write(a.name + " buys " + amount + " " + item.getA().name + " from " + b.name + " at a price of " + pricePerPiece * amount + "$ - ", Console.Color.LightBlue);
+                    if (a.buy(pricePerPiece, amount, item.getA(), false)) {
+                        item.setB(item.getB() - amount);
+                        if (item.getB() == 0) {
+                            b.inventory.remove(item);
                         }
+                        b.money += amount * pricePerPiece;
+                        shell.writeln("OK", Console.Color.LightGreen);
                     } else {
-                        shell.writeln(a.nickname + " gone bankrupt over " + amount + " " + sell.name);
+                        shell.writeln(a.name + " gone bankrupt.", Console.Color.LightRed);
                     }
-                } else {
-                    shell.writeln("Bankruptcy error");
+                } catch (Exception e) {
                 }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                 }
             }
         }).start();
     }
 
-    public static ArrayList<Seller> getMarket(String id){
-        for (Tuple<String, ArrayList<Seller>> m:markets){
+    private static Seller choose(ArrayList<Seller> sellers) {
+        int random = new Random().nextInt(sellers.size());
+        if (!sellers.get(random).bankrupt)
+            return sellers.get(random);
+        return choose(sellers);
+    }
+
+    public static ArrayList<Seller> getMarket(String id) {
+        for (Tuple<String, ArrayList<Seller>> m : markets) {
             if (m.getA().equals(id))
                 return m.getB();
         }
         return new ArrayList<>();
     }
 
-    static class Seller {
+    public static class Seller {
 
         private static final String[] NICKNAMES = {
                 "Liam",
                 "Emma",
                 "Noah",
-                "Olivia",
-                "William",
-                "Ava",
-                "James",
-                "Isabella",
-                "Oliver",
-                "Sophia",
-                "Benjamin",
-                "Charlotte",
-                "Elijah",
-                "Mia",
-                "Lucas",
-                "Amelia",
-                "Mason",
-                "Harper",
-                "Logan",
-                "Evelyn",
-                "Alexander",
-                "Abigail",
-                "Ethan",
                 "Emily",
                 "Jacob",
-                "Elizabeth",
+                "Nir",
                 "Michael",
-                "Mila",
-                "Daniel",
-                "Ella",
-                "Henry",
-                "Avery",
                 "Jackson",
-                "Sofia",
-                "Sebastian",
-                "Camila",
-                "Aiden",
-                "Aria",
-                "Matthew",
-                "Scarlett",
-                "Samuel",
-                "Victoria",
-                "David",
-                "Madison",
-                "Joseph",
-                "Luna",
-                "Carter",
-                "Grace",
-                "Owen",
-                "Chloe",
-                "Wyatt",
-                "Penelope",
-                "John",
-                "Layla",
+                "Nadav",
+                "Amit",
                 "Jack",
                 "Riley",
                 "Luke",
-                "Zoey",
-                "Jayden",
-                "Nora",
-                "Dylan",
-                "Lily",
-                "Grayson",
-                "Eleanor",
-                "Levi",
-                "Hannah",
-                "Isaac",
-                "Lillian",
-                "Gabriel",
-                "Addison",
-                "Julian",
-                "Aubrey",
-                "Mateo",
-                "Ellie",
-                "Anthony",
                 "Stella",
-                "Jaxon",
-                "Natalie",
-                "Lincoln",
-                "Zoe",
-                "Joshua",
                 "Leah",
-                "Christopher",
-                "Hazel",
-                "Andrew",
-                "Violet",
-                "Theodore",
-                "Aurora",
                 "Caleb",
-                "Savannah",
-                "Ryan",
-                "Audrey",
-                "Asher",
                 "Brooklyn",
                 "Nathan",
-                "Bella",
                 "Thomas",
                 "Claire",
                 "Leo",
-                "Skylar",
-                "Isaiah",
                 "Lucy",
-                "Charles",
-                "Paisley",
-                "Josiah",
-                "Everly",
-                "Hudson",
                 "Anna",
-                "Christian",
                 "Caroline",
-                "Hunter",
-                "Nova",
                 "Connor",
-                "Genesis",
-                "Eli",
                 "Emilia",
-                "Ezra",
-                "Kennedy",
                 "Aaron",
                 "Samantha",
                 "Landon",
                 "Maya",
-                "Adrian",
-                "Willow",
-                "Jonathan",
-                "Kinsley",
-                "Nolan",
-                "Naomi",
-                "Jeremiah",
-                "Aaliyah",
-                "Easton",
-                "Elena",
-                "Elias",
-                "Sarah",
-                "Colton",
-                "Ariana",
-                "Cameron",
-                "Allison",
-                "Carson",
-                "Gabriella",
-                "Robert",
-                "Alice",
-                "Angel",
-                "Madelyn",
-                "Maverick",
-                "Cora",
-                "Nicholas",
                 "Ruby",
-                "Dominic",
                 "Eva",
                 "Jaxson",
-                "Serenity",
-                "Greyson",
-                "Autumn",
-                "Adam",
-                "Adeline",
                 "Ian",
-                "Hailey",
-                "Austin",
-                "Gianna",
-                "Santiago",
-                "Valentina",
-                "Jordan",
-                "Isla",
-                "Cooper",
-                "Eliana",
-                "Brayden",
                 "Quinn",
                 "Roman",
-                "Nevaeh",
-                "Evan",
                 "Ivy",
-                "Ezekiel",
                 "Sadie",
                 "Xavier",
-                "Piper",
                 "Jose",
                 "Lydia",
-                "Jace",
                 "Alexa",
-                "Jameson",
-                "Josephine",
                 "Leonardo",
-                "Emery",
                 "Bryson",
-                "Julia",
-                "Axel",
-                "Delilah",
-                "Everett",
                 "Arianna",
                 "Parker",
-                "Vivian",
-                "Kayden",
-                "Kaylee",
-                "Miles",
                 "Sophie",
-                "Sawyer",
-                "Brielle",
                 "Jason",
                 "Madeline"
         };
 
-        private String name = Quteshell.random(4);
-        private String nickname = NICKNAMES[new Random().nextInt(NICKNAMES.length)];
-        private int money = (1 + new Random().nextInt(10)) * 50;
-        private boolean bankrupt = false;
+        public String name = Quteshell.random(4);
+        public int money = (1 + new Random().nextInt(10)) * 50;
+        public boolean bankrupt = false;
         private ArrayList<Tuple<Item, Integer>> inventory = new ArrayList<>();
 
-        private boolean buy(int ppp, int amount, Item item) {
+        public Seller(ArrayList<Seller> sellers) {
+            chooseName(sellers);
+        }
+
+        private void chooseName(ArrayList<Seller> sellers) {
+            name = NICKNAMES[new Random().nextInt(NICKNAMES.length)];
+            for (Seller seller : sellers) {
+                if (seller.name.equals(name)) {
+                    chooseName(sellers);
+                }
+            }
+        }
+
+        public boolean buy(int ppp, int amount, Item item, boolean bankrupcyProtection) {
             if (amount * ppp > money) {
-                bankrupt = true;
+                if (!bankrupcyProtection)
+                    bankrupt = true;
                 return false;
             } else {
                 boolean added = false;
@@ -285,9 +163,9 @@ public class Market {
         }
     }
 
-    static class Item {
+    public static class Item {
 
-        private static final Item[] ALL_ITEMS = {
+        public static final Item[] ALL_ITEMS = {
                 new Item("Shampoo", 6),
                 new Item("Deoderant", 8),
                 new Item("Lemon", 2),
@@ -305,16 +183,17 @@ public class Market {
                 new Item("Smartphone", 100),
                 new Item("Headphones", 50),
                 new Item("Donut", 8),
-                new Item("Laptop", 580),
+                new Item("Laptop", 105),
                 new Item("Mouse", 50),
                 new Item("Paperweight", 25),
                 new Item("Cucumber", 5),
                 new Item("Tomato", 6),
-                new Item("Gameconsole", 80),
-                new Item("Flag", 600)
+                new Item("Kipod", 4),
+                new Item("Gameconsole", 40),
+                new Item("Flag", 150)
         };
 
-        private String name;
+        public String name;
         private int value;
 
         public Item(String name, int value) {

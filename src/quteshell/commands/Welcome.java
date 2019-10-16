@@ -14,14 +14,16 @@ import quteshell.command.Elevation;
 public class Welcome implements Command {
     @Override
     public void execute(Quteshell shell, String arguments) {
-        shell.writeln("╔═══════════════════════════════════╗");
-        shell.writeln("║  Welcome to the 'Shebang!' game!  ║");
-        shell.writeln("║   You are now logged in as " + shell.getID() + "   ║");
-        shell.writeln("║  You can type 'help' for actions  ║");
-        shell.writeln("║        Game introduction:         ║");
-        shell.writeln("║  Buy and sell items @ the market  ║");
-        shell.writeln("║Type shebang when u have all flags.║");
-        shell.writeln("╚═══════════════════════════════════╝");
+        shell.writeln("╔═════════════════════════════════════════╗");
+        shell.writeln("║ Welcome to the 'Shebang!' game!         ║");
+        shell.writeln("║ You are now logged in as " + shell.getID() + "           ║");
+        shell.writeln("║ You can type 'help' for actions.        ║");
+        shell.writeln("║           Game introduction             ║");
+        shell.writeln("║ Buy and sell items at the market.       ║");
+        shell.writeln("║ Your mission is to find all the flags,  ║");
+        shell.writeln("║ then buy them all.                      ║");
+        shell.writeln("║ When you have them all, type 'shebang'. ║");
+        shell.writeln("╚═════════════════════════════════════════╝");
         shell.execute("money");
     }
 }
