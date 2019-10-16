@@ -1,12 +1,14 @@
 package shebang;
 
-import quteshell.Console;
 import quteshell.Quteshell;
+import shebang.Trader.User;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Market {
+
+    private static final ArrayList<User> users = new ArrayList<User>();
 
     private static final ArrayList<Tuple<String, ArrayList<Trader>>> markets = new ArrayList<>();
 
@@ -14,36 +16,23 @@ public class Market {
         ArrayList<Trader> traders = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
             Trader trader = new Trader(traders);
-            for (int a = 0; a < 5; a++) {
-                trader.add(new Tuple<>(Item.ALL_ITEMS[new Random().nextInt(Item.ALL_ITEMS.length)], new Random().nextInt(10) + 1));
-            }
+
             traders.add(trader);
         }
         markets.add(new Tuple<>(shell.getID(), traders));
         new Thread(() -> {
             while (shell.isRunning()) {
                 try {
-                    Seller a = choose(traders);
-                    Seller b = choose(traders);
-                    Tuple<Item, Integer> item = b.inventory.get(new Random().nextInt(b.inventory.size()));
+                    Trader buyer = choose(traders);
+                    Trader seller = choose(traders);
+                    Tuple<Integer, Item> item = seller.getInventory().get(new Random().nextInt(seller.getInventory().size()));
                     int amount = 1;
-                    if (item.getRight() > 1)
-                        amount += new Random().nextInt(item.getRight() - 1);
-                    int pricePerPiece = item.getLeft().value;
+                    if (item.getLeft() > 1)
+                        amount += new Random().nextInt(item.getLeft() - 1);
+                    int pricePerPiece = item.getRight().getValue();
                     if (pricePerPiece > 1)
                         pricePerPiece += new Random().nextInt(pricePerPiece / 2) * (new Random().nextInt(2) - 1);
-                    shell.writeln();
-                    shell.write(a.name + " buys " + amount + " " + item.getLeft().name + " from " + b.name + " at a price of " + pricePerPiece * amount + "$ - ", Console.Color.LightBlue);
-                    if (a.buy(pricePerPiece, amount, item.getLeft(), false)) {
-                        item.setRight(item.getRight() - amount);
-                        if (item.getRight() == 0) {
-                            b.inventory.remove(item);
-                        }
-                        b.money += amount * pricePerPiece;
-                        shell.writeln("OK", Console.Color.LightGreen);
-                    } else {
-                        shell.writeln(a.name + " gone bankrupt.", Console.Color.LightRed);
-                    }
+                    buyer.buy(shell, seller, item.getRight(), amount, pricePerPiece, false);
                 } catch (Exception e) {
                 }
                 try {
@@ -54,11 +43,11 @@ public class Market {
         }).start();
     }
 
-    private static Seller choose(ArrayList<Seller> sellers) {
-        int random = new Random().nextInt(sellers.size());
-        if (!sellers.get(random).bankrupt)
-            return sellers.get(random);
-        return choose(sellers);
+    private static Trader choose(ArrayList<Trader> traders) {
+        int random = new Random().nextInt(traders.size());
+        if (!traders.get(random).isBankrupt())
+            return traders.get(random);
+        return choose(traders);
     }
 
     public static ArrayList<Trader> getMarket(String id) {
@@ -67,5 +56,16 @@ public class Market {
                 return m.getRight();
         }
         return new ArrayList<>();
+    }
+
+    public static User getUser(String id){
+        for (User user:users){
+            if (user.getID().equals(id)){
+                return user;
+            }
+        }
+        User user = new User(id);
+        users.add(user);
+        return user;
     }
 }

@@ -73,6 +73,9 @@ public class Trader {
     public Trader(ArrayList<Trader> companions) {
         balance = (new Random().nextInt(9) + 1) * 50;
         pickName(companions);
+        for (int a = 0; a < 5; a++) {
+            add(Item.ITEMS[new Random().nextInt(Item.ITEMS.length)], new Random().nextInt(9) + 1);
+        }
     }
 
     private void pickName(ArrayList<Trader> companions) {
@@ -91,7 +94,7 @@ public class Trader {
             quteshell.write(name + " buys ", Console.Color.LightBlue);
         }
         quteshell.write(amount + " " + item.getName() + (amount > 1 ? "s" : "") + " from ", Console.Color.LightBlue);
-        quteshell.write(name == null ? "You" : name, name == null ? Console.Color.LightCyan : Console.Color.LightBlue);
+        quteshell.write(from.name == null ? "You" : from.name, from.name == null ? Console.Color.LightCyan : Console.Color.LightBlue);
         quteshell.write(" at a price of " + totalPrice + "$ - ", Console.Color.LightBlue);
         if (totalPrice > balance) {
             // Can cause bankrupcy
@@ -122,7 +125,7 @@ public class Trader {
         }
     }
 
-    private Tuple<Integer, Item> find(Item item) {
+    protected Tuple<Integer, Item> find(Item item) {
         for (Tuple<Integer, Item> i : inventory) {
             if (i.getRight().equals(item)) {
                 return i;
@@ -131,7 +134,7 @@ public class Trader {
         return null;
     }
 
-    private void add(Item item, int amount) {
+    protected void add(Item item, int amount) {
         Tuple<Integer, Item> entry = find(item);
         if (entry != null) {
             entry.setLeft(entry.getLeft() + amount);
@@ -141,7 +144,7 @@ public class Trader {
         }
     }
 
-    private void remove(Item item, int amount) {
+    protected void remove(Item item, int amount) {
         Tuple<Integer, Item> entry = find(item);
         if (entry != null) {
             entry.setLeft(entry.getLeft() - amount);
@@ -150,4 +153,35 @@ public class Trader {
         }
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public ArrayList<Tuple<Integer, Item>> getInventory() {
+        return inventory;
+    }
+
+    public boolean isBankrupt() {
+        return bankrupt;
+    }
+
+    static class User extends Trader {
+
+        private String id;
+
+        public User(String id) {
+            this.id = id;
+            for (int i = 0; i < 4; i++) {
+                add(Item.ITEMS[new Random().nextInt(Item.ITEMS.length - 1)], new Random().nextInt(4) + 1);
+            }
+        }
+
+        public String getID() {
+            return id;
+        }
+    }
 }

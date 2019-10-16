@@ -8,13 +8,12 @@ import quteshell.commands.Help;
 import quteshell.commands.Welcome;
 import shebang.Market;
 import shebang.commands.money;
-import shebang.commands.sellers;
+import shebang.commands.traders;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Set;
 
 /**
  * Copyright (c) 2019 Nadav Tasher
@@ -32,7 +31,7 @@ public class Quteshell extends Console {
             new Help(),
             new Exit(),
             new money(),
-            new sellers()
+            new traders()
     };
 
     public boolean isRunning() {
