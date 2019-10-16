@@ -1,22 +1,26 @@
 package shebang;
 
-public class Tuple<T, Y> {
-    private T a;
-    private Y b;
-    public Tuple(T a, Y b){
-        this.a = a;
-        this.b = b;
+public class Tuple<T, U> {
+    private T left;
+    private U right;
+    public Tuple(T left, U right){
+        this.left = left;
+        this.right = right;
     }
 
-    public T getA() {
-        return a;
+    public T getLeft() {
+        return left;
     }
 
-    public Y getB() {
-        return b;
+    public U getRight() {
+        return right;
     }
 
-    public void setB(Y b) {
-        this.b = b;
+    public void setLeft(T left) {
+        this.left = left;
+    }
+
+    public void setRight(U right) {
+        this.right = right;
     }
 }

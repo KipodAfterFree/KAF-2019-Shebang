@@ -24,8 +24,8 @@ public class money implements Command {
 
     static int getMoney(String id) {
         for (Tuple<String, Integer> t : moneys) {
-            if (t.getA().equals(id))
-                return t.getB();
+            if (t.getLeft().equals(id))
+                return t.getRight();
         }
         moneys.add(new Tuple<>(id, INITIAL_MONEY));
         return INITIAL_MONEY;
@@ -33,17 +33,17 @@ public class money implements Command {
 
     static void add(String id, int amount) {
         for (Tuple<String, Integer> t : moneys) {
-            if (t.getA().equals(id))
-                t.setB(t.getB() + amount);
+            if (t.getLeft().equals(id))
+                t.setRight(t.getRight() + amount);
         }
     }
 
     static boolean deduct(String id, int amount) {
         for (Tuple<String, Integer> t : moneys) {
-            if (t.getA().equals(id))
-                if (t.getB() - amount < 0)
+            if (t.getLeft().equals(id))
+                if (t.getRight() - amount < 0)
                     return false;
-            t.setB(t.getB() - amount);
+            t.setRight(t.getRight() - amount);
         }
         return false;
     }
