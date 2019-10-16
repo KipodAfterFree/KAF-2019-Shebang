@@ -15,9 +15,7 @@ public class Market {
     public static void begin(Quteshell shell) {
         ArrayList<Trader> traders = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
-            Trader trader = new Trader(traders);
-
-            traders.add(trader);
+            traders.add(new Trader(traders));
         }
         markets.add(new Tuple<>(shell.getID(), traders));
         new Thread(() -> {

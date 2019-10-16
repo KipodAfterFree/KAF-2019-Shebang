@@ -7,6 +7,7 @@ import quteshell.commands.Exit;
 import quteshell.commands.Help;
 import quteshell.commands.Welcome;
 import shebang.Market;
+import shebang.commands.inventory;
 import shebang.commands.money;
 import shebang.commands.traders;
 
@@ -31,7 +32,8 @@ public class Quteshell extends Console {
             new Help(),
             new Exit(),
             new money(),
-            new traders()
+            new traders(),
+            new inventory(),
     };
 
     public boolean isRunning() {

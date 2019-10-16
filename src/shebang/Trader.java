@@ -93,7 +93,7 @@ public class Trader {
         } else {
             quteshell.write(name + " buys ", Console.Color.LightBlue);
         }
-        quteshell.write(amount + " " + item.getName() + (amount > 1 ? "s" : "") + " from ", Console.Color.LightBlue);
+        quteshell.write(amount + " " + item.getName() + " from ", Console.Color.LightBlue);
         quteshell.write(from.name == null ? "You" : from.name, from.name == null ? Console.Color.LightCyan : Console.Color.LightBlue);
         quteshell.write(" at a price of " + totalPrice + "$ - ", Console.Color.LightBlue);
         if (totalPrice > balance) {
@@ -169,7 +169,7 @@ public class Trader {
         return bankrupt;
     }
 
-    static class User extends Trader {
+    public static class User extends Trader {
 
         private String id;
 

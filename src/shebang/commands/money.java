@@ -14,7 +14,7 @@ public class money implements Command {
     @Override
     public void execute(Quteshell shell, String arguments) {
         shell.write("You have ");
-        shell.write(String.valueOf(Market.getUser(shell.getID())), Console.Color.LightGreen);
-        shell.writeln("$.");
+        shell.write(String.valueOf(Market.getUser(shell.getID()).getBalance()), Console.Color.LightGreen);
+        shell.writeln("$");
     }
 }
