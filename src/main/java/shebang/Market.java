@@ -26,7 +26,7 @@ public class Market {
                     Tuple<Integer, Item> item = seller.getInventory().get(new Random().nextInt(seller.getInventory().size()));
                     int amount = 1;
                     if (item.getLeft() > 1)
-                        amount += new Random().nextInt(item.getLeft() - 1);
+                        amount += new Random().nextInt((item.getLeft() - 1) / 2);
                     int pricePerPiece = item.getRight().getValue();
                     if (pricePerPiece > 1)
                         pricePerPiece += new Random().nextInt(pricePerPiece / 2) * (new Random().nextInt(2) - 1);
@@ -56,9 +56,9 @@ public class Market {
         return new ArrayList<>();
     }
 
-    public static User getUser(String id){
-        for (User user:users){
-            if (user.getID().equals(id)){
+    public static User getUser(String id) {
+        for (User user : users) {
+            if (user.getID().equals(id)) {
                 return user;
             }
         }

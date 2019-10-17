@@ -1,15 +1,10 @@
 package quteshell;
 
+import org.reflections.Reflections;
 import quteshell.command.Command;
 import quteshell.command.Elevation;
 import quteshell.command.Toolbox;
-import quteshell.commands.Exit;
-import quteshell.commands.Help;
-import quteshell.commands.Welcome;
 import shebang.Market;
-import shebang.commands.inventory;
-import shebang.commands.money;
-import shebang.commands.traders;
 
 import java.io.*;
 import java.net.Socket;
@@ -23,22 +18,15 @@ import java.util.Random;
 
 public class Quteshell extends Console {
 
-    // Constants
-    private static final String NAME = "qute";
+    private boolean pause = false;
+    private String buffer = "";
 
-    // Shell commands
-    private Command[] COMMANDS = {
-            new Welcome(),
-            new Help(),
-            new Exit(),
-            new money(),
-            new traders(),
-            new inventory(),
-    };
-
-    public boolean isRunning() {
-        return running;
+    public void pause() {
+        this.pause = true;
     }
+
+    // Constants
+    private static final String NAME = "shebang!";
 
     // ID & Host access
     private String id = random(4);
@@ -51,15 +39,16 @@ public class Quteshell extends Console {
     // Shell
     private boolean running = true;
     private int elevation = Elevation.DEFAULT;
+    private final ArrayList<Command> commands = new ArrayList<>();
 
     // History
     private ArrayList<String> history = new ArrayList<>();
 
     // UI
-    private String name = "shebang!";
+    private String prompt = NAME;
 
     /**
-     * Default constructor without a name.
+     * Default constructor without a prompt.
      *
      * @param socket Client-Server socket
      */
@@ -82,8 +71,18 @@ public class Quteshell extends Console {
      * @return Commands
      */
     public ArrayList<Command> getCommands() {
+        // Initialize shebang array
+        if (this.commands.isEmpty()) {
+            for (Class<? extends Command> command : new Reflections(getClass()).getSubTypesOf(Command.class)) {
+                try {
+                    this.commands.add(command.newInstance());
+                } catch (Exception ignored) {
+                }
+            }
+        }
+        // Categorize shebang by elevation
         ArrayList<Command> commands = new ArrayList<>();
-        for (Command command : COMMANDS) {
+        for (Command command : this.commands) {
             int elevation = Toolbox.getElevation(command);
             if (elevation != Elevation.NONE) {
                 if (elevation == Elevation.ALL || this.elevation >= elevation) {
@@ -110,6 +109,24 @@ public class Quteshell extends Console {
      */
     public int getElevation() {
         return elevation;
+    }
+
+    /**
+     * This function sets the shell's elevation.
+     *
+     * @param elevation Elevation
+     */
+    public void setElevation(int elevation) {
+        this.elevation = elevation;
+    }
+
+    /**
+     * This function returns whether the shell is running.
+     *
+     * @return Running
+     */
+    public boolean isRunning() {
+        return running;
     }
 
     /**
@@ -184,8 +201,19 @@ public class Quteshell extends Console {
      * @param input Input from the socket
      */
     private void read(String input) {
+        pause = false;
+        write(buffer);
+        buffer = "";
         execute(input);
-        prompt(name, elevation);
+        // prompt(prompt, elevation);
+    }
+
+    @Override
+    public void write(String output) {
+        if (!pause)
+            super.write(output);
+        else
+            buffer += output;
     }
 
     /**
@@ -194,7 +222,7 @@ public class Quteshell extends Console {
      * @param length Length of string
      * @return Random string
      */
-    public static String random(int length) {
+    private String random(int length) {
         final String charset = "0123456789abcdefghijklmnopqrstuvwxyz";
         if (length > 0) {
             return charset.charAt(new Random().nextInt(charset.length())) + random(length - 1);
@@ -227,7 +255,7 @@ public class Quteshell extends Console {
                 print("Command '" + split[0] + "' handled");
             } else {
                 // Write an error message to the socket
-                writeln(name + ": " + split[0] + ": not handled");
+                writeln(prompt + ": " + split[0] + ": not handled");
                 print("Command '" + split[0] + "' not handled");
             }
         }

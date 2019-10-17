@@ -109,17 +109,18 @@ public class Trader {
             Tuple<Integer, Item> entry = from.find(item);
             if (entry != null) {
                 if (entry.getLeft() >= amount) {
-                    balance -= totalPrice;
-                    from.remove(item, amount);
+                    this.balance -= totalPrice;
+                    from.balance += totalPrice;
                     this.add(item, amount);
+                    from.remove(item, amount);
                     quteshell.writeln("OK", Console.Color.LightGreen);
                     return true;
                 } else {
-                    quteshell.writeln("Not enough cargo", Console.Color.LightRed);
+                    quteshell.writeln("Not enough quantity", Console.Color.LightRed);
                     return false;
                 }
             } else {
-                quteshell.writeln("No such cargo", Console.Color.LightRed);
+                quteshell.writeln("No such item", Console.Color.LightRed);
                 return false;
             }
         }

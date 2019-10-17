@@ -16,7 +16,7 @@ import java.util.ArrayList;
  **/
 
 @Elevation(Elevation.ALL)
-@Help.Description("The help command lists all commands, or a command description.")
+@Help.Description("The help command lists all shebang, or a command description.")
 public class Help implements Command {
 
     private static final int COLUMNS = 3;
@@ -25,7 +25,7 @@ public class Help implements Command {
     public void execute(Quteshell shell, String arguments) {
         ArrayList<Command> commands = shell.getCommands();
         if (arguments == null) {
-            shell.writeln("List of available commands:");
+            shell.writeln("List of available shebang:");
             for (int c = 0; c < commands.size(); c += COLUMNS) {
                 for (int r = 0; r < COLUMNS; r++) {
                     if (c + r < commands.size()) {

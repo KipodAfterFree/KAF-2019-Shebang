@@ -1,4 +1,4 @@
-package shebang.commands;
+package quteshell.commands.shebang;
 
 import quteshell.Console;
 import quteshell.Quteshell;

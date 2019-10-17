@@ -1,12 +1,10 @@
-package shebang.commands;
+package quteshell.commands.shebang;
 
 import quteshell.Console;
 import quteshell.Quteshell;
 import quteshell.command.Command;
 import quteshell.command.Elevation;
 import shebang.Market;
-
-import java.util.ArrayList;
 
 @Elevation(Elevation.DEFAULT)
 public class money implements Command {
