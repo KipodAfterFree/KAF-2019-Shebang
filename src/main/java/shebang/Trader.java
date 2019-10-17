@@ -98,7 +98,7 @@ public class Trader {
             quteshell.write("You", Console.Color.LightCyan);
             quteshell.write(" buy ", VERBOSE_COLOR);
         } else {
-            quteshell.write(name + " buys ", Console.Color.LightBlue);
+            quteshell.write(name + " buys ", VERBOSE_COLOR);
         }
         quteshell.write(amount + " " + item.getName() + " from ", VERBOSE_COLOR);
         quteshell.write(from.name == null ? "You" : from.name, from.name == null ? Console.Color.LightCyan : VERBOSE_COLOR);
