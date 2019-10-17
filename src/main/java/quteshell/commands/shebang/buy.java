@@ -11,6 +11,8 @@ import shebang.Trader;
 import shebang.Trader.User;
 import shebang.Tuple;
 
+import static shebang.Trader.VERBOSE_COLOR;
+
 @Elevation(Elevation.DEFAULT)
 @Help.Description("buy - buy from a trader.\ne.g. 'buy 1 mouse maya 36' or 'buy [Amount] [Item] [Trader] [Price per Piece]'")
 public class buy implements Command {
@@ -41,7 +43,7 @@ public class buy implements Command {
                             }
                             if (item != null) {
                                 shell.write("You", Console.Color.LightCyan);
-                                shell.write(" offered to buy " + amount + " " + item.getName() + " from " + trader.getName() + " at a price of " + ppp * amount + "$ - ", Console.Color.LightBlue);
+                                shell.write(" offered to buy " + amount + " " + item.getName() + " from " + trader.getName() + " at a price of " + ppp * amount + "$ - ", VERBOSE_COLOR);
                                 if (ppp >= (0.8 * ((double) item.getValue()))) {
                                     shell.writeln("Approved", Console.Color.LightGreen);
                                     user.buy(shell, trader, item, amount, ppp, true);

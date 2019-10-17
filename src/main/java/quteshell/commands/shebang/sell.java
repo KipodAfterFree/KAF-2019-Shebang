@@ -11,6 +11,8 @@ import shebang.Trader;
 import shebang.Trader.User;
 import shebang.Tuple;
 
+import static shebang.Trader.VERBOSE_COLOR;
+
 @Elevation(Elevation.DEFAULT)
 @Help.Description("sell - offer a trader an item from your inventory.\ne.g. 'sell 1 potato nadav 12' or 'sell [Amount] [Item] [Trader] [Price per Piece]'")
 public class sell implements Command {
@@ -41,7 +43,7 @@ public class sell implements Command {
                         if (!trader.isBankrupt()) {
                             if (item != null) {
                                 shell.write("You", Console.Color.LightCyan);
-                                shell.write(" offered " + trader.getName() + " to buy " + amount + " " + item.getName() + " at a price of " + ppp * amount + "$ - ", Console.Color.LightBlue);
+                                shell.write(" offered " + trader.getName() + " to buy " + amount + " " + item.getName() + " at a price of " + ppp * amount + "$ - ", VERBOSE_COLOR);
                                 if (ppp <= (1.3 * ((double) item.getValue()))) {
                                     shell.writeln("Approved", Console.Color.LightGreen);
                                     trader.buy(shell, user, item, amount, ppp, true);

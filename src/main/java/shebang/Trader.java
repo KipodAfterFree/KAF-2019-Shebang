@@ -65,6 +65,8 @@ public class Trader {
     private boolean bankrupt = false;
     private ArrayList<Tuple<Integer, Item>> inventory = new ArrayList<>();
 
+    public static final Console.Color VERBOSE_COLOR = Console.Color.LightGray;
+
     public Trader() {
         balance = 200;
         name = null;
@@ -94,13 +96,13 @@ public class Trader {
         int totalPrice = amount * price;
         if (name == null) {
             quteshell.write("You", Console.Color.LightCyan);
-            quteshell.write(" buy ", Console.Color.LightBlue);
+            quteshell.write(" buy ", VERBOSE_COLOR);
         } else {
             quteshell.write(name + " buys ", Console.Color.LightBlue);
         }
-        quteshell.write(amount + " " + item.getName() + " from ", Console.Color.LightBlue);
-        quteshell.write(from.name == null ? "You" : from.name, from.name == null ? Console.Color.LightCyan : Console.Color.LightBlue);
-        quteshell.write(" at a price of " + totalPrice + "$ - ", Console.Color.LightBlue);
+        quteshell.write(amount + " " + item.getName() + " from ", VERBOSE_COLOR);
+        quteshell.write(from.name == null ? "You" : from.name, from.name == null ? Console.Color.LightCyan : VERBOSE_COLOR);
+        quteshell.write(" at a price of " + totalPrice + "$ - ", VERBOSE_COLOR);
         if (totalPrice > balance) {
             // Can cause bankrupcy
             if (bankrupcyProtection) {
