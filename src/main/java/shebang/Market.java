@@ -44,7 +44,7 @@ public class Market {
                 } catch (Exception e) {
                 }
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                 }
             }
