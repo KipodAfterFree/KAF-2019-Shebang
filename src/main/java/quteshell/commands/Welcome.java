@@ -14,16 +14,16 @@ import quteshell.command.Elevation;
 public class Welcome implements Command {
     @Override
     public void execute(Quteshell shell, String arguments) {
-        shell.writeln("╔═════════════════════════════════════════╗");
-        shell.writeln("║ Welcome to the 'Shebang!' game!         ║");
-        shell.writeln("║ You are now logged in as " + shell.getID() + "           ║");
-        shell.writeln("║ You can type 'help' for actions.        ║");
-        shell.writeln("║           Game introduction             ║");
-        shell.writeln("║ Buy and sell items at the market.       ║");
-        shell.writeln("║ Your mission is to find all the flags,  ║");
-        shell.writeln("║ then buy them all.                      ║");
-        shell.writeln("║ When you have them all, type 'shebang'. ║");
-        shell.writeln("╚═════════════════════════════════════════╝");
-        shell.execute("money");
+        shell.writeln("╔═════════════════════════════════════════════╗");
+        shell.writeln("║ Welcome to the 'Shebang!' game!             ║");
+        shell.writeln("║ You are now logged in as " + shell.getID() + "               ║");
+        shell.writeln("║ You can type 'help' for actions.            ║");
+        shell.writeln("║             Game introduction               ║");
+        shell.writeln("║ Buy and sell items at the market.           ║");
+        shell.writeln("║ Your mission is: buy all of the flags.      ║");
+        shell.writeln("║ When you have them all, type 'shebang'.     ║");
+        shell.writeln("║ You can type 'off' to pause output.         ║");
+        shell.writeln("╚═════════════════════════════════════════════╝");
+        shell.execute("inventory");
     }
 }

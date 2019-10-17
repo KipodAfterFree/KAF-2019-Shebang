@@ -61,7 +61,7 @@ public class buy implements Command {
                     shell.writeln("Number conversion error", Console.Color.Red);
                 }
             } else {
-                shell.writeln("Too many arguments", Console.Color.Red);
+                shell.writeln("Too many/few arguments", Console.Color.Red);
             }
         } else {
             shell.writeln("Missing arguments", Console.Color.Red);

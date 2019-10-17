@@ -12,6 +12,7 @@ import shebang.Tuple;
 public class inventory implements Command {
     @Override
     public void execute(Quteshell shell, String arguments) {
+        shell.writeln("Your inventory:");
         int summery = 0;
         for (Tuple<Integer, Item> entry : Market.getUser(shell.getID()).getInventory()) {
             shell.write(entry.getRight().getName(), Console.Color.LightOrange);

@@ -68,13 +68,18 @@ public class Trader {
     public Trader() {
         balance = 200;
         name = null;
+        giveItems(4, 5);
     }
 
     public Trader(ArrayList<Trader> companions) {
-        balance = (new Random().nextInt(9) + 1) * 50;
+        balance = (new Random().nextInt(8) + 2) * 50;
         pickName(companions);
-        for (int a = 0; a < 5; a++) {
-            add(Item.ITEMS[new Random().nextInt(Item.ITEMS.length)], new Random().nextInt(9) + 1);
+        giveItems(5, 10);
+    }
+
+    private void giveItems(int howMany, int maxAmount) {
+        for (int a = 0; a < howMany; a++) {
+            add(Item.ITEMS[new Random().nextInt(Item.ITEMS.length - 1)], new Random().nextInt(maxAmount - 1) + 1);
         }
     }
 
@@ -176,9 +181,6 @@ public class Trader {
 
         public User(String id) {
             this.id = id;
-            for (int i = 0; i < 4; i++) {
-                add(Item.ITEMS[new Random().nextInt(Item.ITEMS.length - 1)], new Random().nextInt(4) + 1);
-            }
         }
 
         public String getID() {
