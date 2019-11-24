@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Main {
 
-    private static final int PORT = 7294;
+    private static final int PORT = 8000;
     private static final ArrayList<Quteshell> quteshells = new ArrayList<>();
 
     private static boolean listening = true;
